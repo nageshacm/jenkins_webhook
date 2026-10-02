@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    parameters {
+        // String parameter for first name
+        string(name: 'firstname', defaultValue: '123', description: 'Enter your first name')
+        
+        // String parameter for last name
+        string(name: 'lastname', defaultValue: '456', description: 'Enter your last name')
+        
+        // Fixed Boolean parameter
+        booleanParam(name: 'RUN_TESTS', defaultValue: true, description: 'Do you want to run test cases?')
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo "========================================="
+                echo "Building for: ${params.firstname} ${params.lastname}"
+                echo "========================================="
+            }
+        }
+        
+        stage('Test') {
+            // This stage only runs if the checkbox is checked
+            when {
+                expression { return params.RUN_TESTS }
+            }
+            steps {
+                echo "Running test cases..."
+            }
+        }
+        
+        stage('Skip Tests') {
+            // This stage only runs if the checkbox is UNCHECKED
+            when {
+                expression { return !params.RUN_TESTS }
+            }
+            steps {
+                echo "Skipping test cases because the box was unchecked."
+            }
+        }
+    }
+}
