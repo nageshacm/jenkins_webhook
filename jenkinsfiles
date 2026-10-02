@@ -40,5 +40,14 @@ pipeline {
                 echo "Skipping test cases because the box was unchecked."
             }
         }
+ stage('webhook Tests') {
+            // This stage only runs if the checkbox is UNCHECKED
+            when {
+                expression { return !params.RUN_TESTS }
+            }
+            steps {
+                echo "Skipping test cases because the box was unchecked."
+            }
+        }
     }
 }
